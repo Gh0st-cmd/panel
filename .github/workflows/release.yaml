@@ -26,7 +26,7 @@ jobs:
         env:
           REF: ${{ github.ref }}
         run: |
-          BRANCH=release/${REF:10}
+          BRANCH=release/release
           git config --local user.email "ci@pelican.dev"
           git config --local user.name "Pelican CI"
           git checkout -b $BRANCH
