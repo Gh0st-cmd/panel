@@ -60,6 +60,5 @@ Some of our popular eggs include but are not limited to:
   * PostgreSQL
 * [Voice Servers](https://github.com/pelican-eggs/voice)
 * [Storage](https://github.com/pelican-eggs/storage)
-* [Monitoring](https://github.com/pelican-eggs/monitoring)
 
 Copyright Pelican® 2024
