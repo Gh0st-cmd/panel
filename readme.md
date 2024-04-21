@@ -47,7 +47,6 @@ Some of our popular eggs include but are not limited to:
   * JMusicBot
   * SinusBot
   * Dynamica
-* [Software](https://github.com/pelican-eggs/software)
 * [Programming Languages](https://github.com/pelican-eggs/generic)
   * C#
   * Java
