@@ -13,7 +13,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 21
+          node-version: 16
           cache: "yarn"
 
       - name: Install dependencies
@@ -22,36 +22,10 @@ jobs:
       - name: Build
         run: yarn build:production
 
-      - name: Create release branch and bump version
-        env:
-          REF: ${{ github.ref }}
-        run: |
-          BRANCH=release/release
-          git config --local user.email "ci@pelican.dev"
-          git config --local user.name "Pelican CI"
-          git checkout -b $BRANCH
-          git push -u origin $BRANCH
-          sed -i "s/    'version' => 'canary',/    'version' => '${REF:11}',/" config/app.php
-          git add config/app.php
-          git commit -m "ci(release): bump version"
-          git push
-
       - name: Create release archive
         run: |
           rm -rf node_modules tests CODE_OF_CONDUCT.md CONTRIBUTING.md flake.lock flake.nix phpunit.xml shell.nix
           tar -czf panel.tar.gz * .editorconfig .env.example .eslintignore .eslintrc.js .gitignore .prettierrc.json
-
-      - name: Extract changelog
-        env:
-          REF: ${{ github.ref }}
-        run: |
-          sed -n "/^## refs/heads/release/,/^## /{/^## /b;p}" CHANGELOG.md > ./RELEASE_CHANGELOG
-
-      - name: Create checksum and add to changelog
-        run: |
-          SUM=`sha256sum panel.tar.gz`
-          echo -e "\n#### SHA256 Checksum\n\n\`\`\`\n$SUM\n\`\`\`\n" >> ./RELEASE_CHANGELOG
-          echo $SUM > checksum.txt
 
       - name: Create release
         id: create_release
@@ -73,14 +47,3 @@ jobs:
           asset_path: panel.tar.gz
           asset_name: panel.tar.gz
           asset_content_type: application/gzip
-
-      - name: Upload release checksum
-        id: upload-release-checksum
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./checksum.txt
-          asset_name: checksum.txt
-          asset_content_type: text/plain
