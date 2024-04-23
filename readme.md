@@ -57,7 +57,6 @@ Some of our popular eggs include but are not limited to:
   * Redis
   * MariaDB
   * PostgreSQL
-* [Voice Servers](https://github.com/pelican-eggs/voice)
 * [Storage](https://github.com/pelican-eggs/storage)
 
 Copyright Pelican® 2024
