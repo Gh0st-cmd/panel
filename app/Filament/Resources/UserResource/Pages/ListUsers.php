@@ -52,10 +52,10 @@ class ListUsers extends ListRecords
                     ->label('Servers'),
                 Tables\Columns\TextColumn::make('subusers_count')
                     ->visibleFrom('sm')
+                    ->label('Subusers')
                     ->counts('subusers')
-                    ->icon('tabler-users')
-                    // ->formatStateUsing(fn (string $state, $record): string => (string) ($record->servers_count + $record->subusers_count))
-                    ->label('Subuser Accounts'),
+                    ->icon('tabler-users'),
+                // ->formatStateUsing(fn (string $state, $record): string => (string) ($record->servers_count + $record->subusers_count))
             ])
             ->filters([
                 //
@@ -63,6 +63,7 @@ class ListUsers extends ListRecords
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
+            ->checkIfRecordIsSelectableUsing(fn (User $user) => !$user->servers_count)
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
@@ -72,7 +73,8 @@ class ListUsers extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Create User'),
         ];
     }
 }

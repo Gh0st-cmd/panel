@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\UserResource\Pages;
 
+use App\Enums\ServerState;
 use App\Filament\Resources\UserResource;
+use App\Services\Servers\SuspensionService;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use App\Models\User;
@@ -21,15 +23,6 @@ class EditUser extends EditRecord
                 Section::make()->schema([
                     Forms\Components\TextInput::make('username')->required()->maxLength(191),
                     Forms\Components\TextInput::make('email')->email()->required()->maxLength(191),
-
-                    Forms\Components\TextInput::make('name_first')
-                        ->maxLength(191)
-                        ->hidden(fn (string $operation): bool => $operation === 'create')
-                        ->label('First Name'),
-                    Forms\Components\TextInput::make('name_last')
-                        ->maxLength(191)
-                        ->hidden(fn (string $operation): bool => $operation === 'create')
-                        ->label('Last Name'),
 
                     Forms\Components\TextInput::make('password')
                         ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
@@ -62,18 +55,40 @@ class EditUser extends EditRecord
                         ->default(false),
 
                     Forms\Components\Hidden::make('skipValidation')->default(true),
+
                     Forms\Components\Select::make('language')
                         ->required()
                         ->hidden()
                         ->default('en')
                         ->options(fn (User $user) => $user->getAvailableLanguages()),
-                ])->columns(2),
+
+                ])->columns(),
             ]);
     }
     protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),
+
+            Actions\Action::make('toggleSuspend')
+                ->hidden(fn (User $user) => $user->servers()->whereNot('status', ServerState::Suspended)->count() === 0)
+                ->label('Suspend Servers')
+                ->color('warning')
+                ->action(function (User $user) {
+                    foreach ($user->servers()->whereNot('status', ServerState::Suspended)->get() as $server) {
+                        resolve(SuspensionService::class)->toggle($server);
+                    }
+                }),
+
+            Actions\Action::make('toggleUnsuspend')
+                ->hidden(fn (User $user) => $user->servers()->where('status', ServerState::Suspended)->count() === 0)
+                ->label('Unsuspend Servers')
+                ->color('success')
+                ->action(function (User $user) {
+                    foreach ($user->servers()->where('status', ServerState::Suspended)->get() as $server) {
+                        resolve(SuspensionService::class)->toggle($server, SuspensionService::ACTION_UNSUSPEND);
+                    }
+                }),
         ];
     }
 }
