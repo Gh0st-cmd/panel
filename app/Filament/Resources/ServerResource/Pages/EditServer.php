@@ -7,18 +7,13 @@ use Filament\Actions;
 use Filament\Forms;
 use App\Enums\ContainerStatus;
 use App\Enums\ServerState;
-use App\Models\Allocation;
 use App\Models\Egg;
-use App\Models\Node;
 use App\Models\Server;
 use App\Models\ServerVariable;
 use App\Repositories\Daemon\DaemonServerRepository;
-use App\Services\Allocations\AssignmentService;
 use App\Services\Servers\ServerDeletionService;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Closure;
 
@@ -38,7 +33,6 @@ class EditServer extends EditRecord
             ->schema([
                 Forms\Components\ToggleButtons::make('docker')
                     ->label('Container Status')
-                    ->hiddenOn('create')
                     ->inlineLabel()
                     ->formatStateUsing(function ($state, Server $server) {
                         if ($server->node_id === null) {
@@ -71,7 +65,6 @@ class EditServer extends EditRecord
                 Forms\Components\ToggleButtons::make('status')
                     ->label('Server State')
                     ->helperText('')
-                    ->hiddenOn('create')
                     ->inlineLabel()
                     ->formatStateUsing(fn ($state) => $state ?? ServerState::Normal)
                     ->options(fn ($state) => collect(ServerState::cases())->filter(fn ($serverState) => $serverState->value === $state)->mapWithKeys(
@@ -233,7 +226,6 @@ class EditServer extends EditRecord
 
                 Forms\Components\Fieldset::make('Application Feature Limits')
                     ->inlineLabel()
-                    ->hiddenOn('create')
                     ->columnSpan([
                         'default' => 2,
                         'sm' => 4,
@@ -282,8 +274,6 @@ class EditServer extends EditRecord
                         );
                     }),
 
-                Forms\Components\Hidden::make('environment')->default([]),
-
                 Forms\Components\Hidden::make('start_on_completion')->default(true),
 
                 Forms\Components\Section::make('Egg Variables')
@@ -298,18 +288,12 @@ class EditServer extends EditRecord
                         'lg' => 6,
                     ]))
                     ->schema([
-                        Forms\Components\Placeholder::make('Select an egg first to show its variables!')
-                            ->hidden(fn (Forms\Get $get) => !empty($get('server_variables'))),
-
                         Forms\Components\Repeater::make('server_variables')
-                            ->relationship('serverVariables', fn ($query) => $query
-                                ->join('egg_variables', 'egg_variables.id', '=', 'server_variables.variable_id')
-                                ->orderBy('egg_variables.sort')
-                            )
+                            ->label('')
+                            ->relationship('serverVariables')
                             ->grid()
                             ->deletable(false)
-                            ->default([])
-                            ->hidden(fn ($state) => empty($state))
+                            ->addable(false)
                             ->schema([
                                 Forms\Components\TextInput::make('variable_value')
                                     ->rules([
@@ -332,13 +316,12 @@ class EditServer extends EditRecord
                                     ->helperText(fn (ServerVariable $variable) => $variable->variable->description ?: '—')
                                     ->maxLength(191),
 
-                                Forms\Components\Hidden::make('variable_id')->default(0),
+                                Forms\Components\Hidden::make('variable_id'),
                             ])
                             ->columnSpan(2),
                     ]),
 
                 Forms\Components\Section::make('Resource Management')
-                    // ->hiddenOn('create')
                     ->collapsed()
                     ->icon('tabler-server-cog')
                     ->iconColor('primary')
@@ -430,6 +413,8 @@ class EditServer extends EditRecord
     protected function mutateFormDataBeforeSave(array $data): array
     {
         unset($data['docker'], $data['status']);
+
+        // dd($data);
 
         return $data;
     }

@@ -12,7 +12,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Closure;
 use Filament\Forms;
@@ -423,6 +422,8 @@ class CreateServer extends CreateRecord
 
                         Forms\Components\Repeater::make('server_variables')
                             ->relationship('serverVariables')
+                            ->saveRelationshipsBeforeChildrenUsing(null)
+                            ->saveRelationshipsUsing(null)
                             ->grid(2)
                             ->reorderable(false)
                             ->addable(false)
@@ -445,7 +446,12 @@ class CreateServer extends CreateRecord
                                         },
                                     ])
                                     ->label(fn (Forms\Get $get) => $get('name'))
-                                    //->hint('Rule')
+                                    ->live()
+                                    ->afterStateUpdated(function (Forms\Set $set, Forms\Get $get, $state) {
+                                        $environment = $get($envPath = '../../environment');
+                                        $environment[$get('env_variable')] = $state;
+                                        $set($envPath, $environment);
+                                    })
                                     ->hintIcon('tabler-code')
                                     ->hintIconTooltip(fn (Forms\Get $get) => $get('rules'))
                                     ->prefix(fn (Forms\Get $get) => '{{' . $get('env_variable') . '}}')
