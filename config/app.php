@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Facade;
 
 return [
 
-    'name' => 'Pelican',
+    'name' => 'Exilone',
 
     'version' => '1.0.0-beta1',
 
