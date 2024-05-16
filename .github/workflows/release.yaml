@@ -1,9 +1,6 @@
 name: Release
 
-on:
-  push:
-    tags:
-      - "v*"
+on: [push]
 
 jobs:
   release:
@@ -28,29 +25,10 @@ jobs:
       - name: Build
         run: yarn build:production
 
-      - name: Create release branch and bump version
-        env:
-          REF: ${{ github.ref }}
-        run: |
-          BRANCH=release/${REF:10}
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git checkout -b $BRANCH
-          git push -u origin $BRANCH
-          sed -i "s/    'version' => 'canary',/    'version' => '${REF:11}',/" config/app.php
-          git add config/app.php
-          git commit -m "ci(release): bump version"
-          git push
-
       - name: Create release archive
         run: |
           rm -rf node_modules tests CODE_OF_CONDUCT.md CONTRIBUTING.md flake.lock flake.nix phpunit.xml shell.nix
           tar -czf panel.tar.gz * .editorconfig .env.example .eslintignore .eslintrc.js .gitignore .prettierrc.json
-
-      - name: Create checksum
-        run: |
-          SUM=`sha256sum panel.tar.gz`
-          echo $SUM > checksum.txt
 
       - name: Create release
         id: create_release
@@ -71,14 +49,3 @@ jobs:
           asset_path: panel.tar.gz
           asset_name: panel.tar.gz
           asset_content_type: application/gzip
-
-      - name: Upload release checksum
-        id: upload-release-checksum
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./checksum.txt
-          asset_name: checksum.txt
-          asset_content_type: text/plain
