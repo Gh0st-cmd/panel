@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0b864c9d70ba4b0ee467ef915d36d92f",
+    "content-hash": "6cf41ff7536e68e0fa3a5403f4c07620",
     "packages": [
         {
             "name": "abdelhamiderrahmouni/filament-monaco-editor",
-            "version": "v0.2.3",
+            "version": "v0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/abdelhamiderrahmouni/filament-monaco-editor.git",
-                "reference": "9968be3a59a6532e46f6332a990921c4af527c8a"
+                "reference": "3a74de11f74bee5b782df74c998c071c64a17ac0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/abdelhamiderrahmouni/filament-monaco-editor/zipball/9968be3a59a6532e46f6332a990921c4af527c8a",
-                "reference": "9968be3a59a6532e46f6332a990921c4af527c8a",
+                "url": "https://api.github.com/repos/abdelhamiderrahmouni/filament-monaco-editor/zipball/3a74de11f74bee5b782df74c998c071c64a17ac0",
+                "reference": "3a74de11f74bee5b782df74c998c071c64a17ac0",
                 "shasum": ""
             },
             "require": {
@@ -88,7 +88,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-04-20T02:45:00+00:00"
+            "time": "2024-04-20T01:01:49+00:00"
         },
         {
             "name": "anourvalar/eloquent-serialize",
@@ -850,16 +850,16 @@
         },
         {
             "name": "dedoc/scramble",
-            "version": "v0.9.0",
+            "version": "v0.10.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dedoc/scramble.git",
-                "reference": "6280da6809eecaa03243d726b957cc174b1ccb70"
+                "reference": "11607883f3f8453992553e8d64a300c8ba4dd9f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dedoc/scramble/zipball/6280da6809eecaa03243d726b957cc174b1ccb70",
-                "reference": "6280da6809eecaa03243d726b957cc174b1ccb70",
+                "url": "https://api.github.com/repos/dedoc/scramble/zipball/11607883f3f8453992553e8d64a300c8ba4dd9f0",
+                "reference": "11607883f3f8453992553e8d64a300c8ba4dd9f0",
                 "shasum": ""
             },
             "require": {
@@ -912,7 +912,7 @@
             ],
             "support": {
                 "issues": "https://github.com/dedoc/scramble/issues",
-                "source": "https://github.com/dedoc/scramble/tree/v0.9.0"
+                "source": "https://github.com/dedoc/scramble/tree/v0.10.4"
             },
             "funding": [
                 {
@@ -920,7 +920,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-03-11T19:27:28+00:00"
+            "time": "2024-05-15T13:20:53+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -10814,16 +10814,16 @@
         },
         {
             "name": "mockery/mockery",
-            "version": "1.6.11",
+            "version": "1.6.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mockery/mockery.git",
-                "reference": "81a161d0b135df89951abd52296adf97deb0723d"
+                "reference": "1f4efdd7d3beafe9807b08156dfcb176d18f1699"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mockery/mockery/zipball/81a161d0b135df89951abd52296adf97deb0723d",
-                "reference": "81a161d0b135df89951abd52296adf97deb0723d",
+                "url": "https://api.github.com/repos/mockery/mockery/zipball/1f4efdd7d3beafe9807b08156dfcb176d18f1699",
+                "reference": "1f4efdd7d3beafe9807b08156dfcb176d18f1699",
                 "shasum": ""
             },
             "require": {
@@ -10893,7 +10893,7 @@
                 "security": "https://github.com/mockery/mockery/security/advisories",
                 "source": "https://github.com/mockery/mockery"
             },
-            "time": "2024-03-21T18:34:15+00:00"
+            "time": "2024-05-16T03:13:13+00:00"
         },
         {
             "name": "myclabs/deep-copy",
