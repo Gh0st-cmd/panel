@@ -344,7 +344,12 @@ class CreateServer extends CreateRecord
                     ]))
                     ->schema([
                         Forms\Components\Placeholder::make('Select an egg first to show its variables!')
-                            ->hidden(fn (Forms\Get $get) => !empty($get('server_variables'))),
+                            ->hidden(fn (Forms\Get $get) => $get('egg_id')),
+
+                        Forms\Components\Placeholder::make('The selected egg has no variables!')
+                            ->hidden(fn (Forms\Get $get) => !$get('egg_id') ||
+                                Egg::query()->find($get('egg_id'))?->variables()?->count()
+                            ),
 
                         Forms\Components\Repeater::make('server_variables')
                             ->relationship('serverVariables')
@@ -678,9 +683,10 @@ class CreateServer extends CreateRecord
                                     ->placeholder('Enter a custom Image')
                                     ->columnSpan(1),
 
-                                Forms\Components\TagsInput::make('docker_labels')
-                                    ->label('Labels')
-                                    ->placeholder('Enter custom Docker container labels')
+                                Forms\Components\KeyValue::make('docker_labels')
+                                    ->label('Container Labels')
+                                    ->keyLabel('Title')
+                                    ->valueLabel('Description')
                                     ->columnSpan(1),
                             ]),
                     ]),
