@@ -25,7 +25,6 @@ jobs:
       - name: Build
         run: yarn build:production
 
-
       - name: Create release archive
         run: |
           rm -rf node_modules tests CODE_OF_CONDUCT.md CONTRIBUTING.md flake.lock flake.nix phpunit.xml shell.nix
